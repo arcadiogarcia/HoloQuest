@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<levels>
+  <level id="mainMenu">
+    <object name="mouse" type="mouse" x="0" y="0" z="0"></object>
+    <object name="scenarioEditor" type="menuButton" x="250" y="200" z="0" vars='{"text":"Edit","target":"editMenu"}'></object>
+    <object name="runScenario" type="menuButton" x="250" y="500" z="0" vars='{"text":"Run","target":"mainLevel"}'></object>
+  </level>
+  <level id="editMenu">
+    <object name="mouse" type="mouse" x="0" y="0" z="0"></object>
+  </level>
+  <level id="mainLevel">
+    <object name="background" type="background" x="0" y="0" z="-100" static="true"></object>
+    <object name="meshRenderer" type="meshRenderer" x="0" y="0" z="-50"></object>
+    <object name="mouse" type="mouse" x="0" y="0" z="0"></object>
+    <object name="objectSpawner" type="objectSpawner" x="0" y="0" z="0" static="true"></object>
+    <object name="incomingDataHandler" type="incomingDataHandler" x="0" y="0" z="0"></object>
+    <object name="player" type="player" x="0" y="0" z="0"></object>
+    <object name="levelLoader" type="levelLoader" x="0" y="0" z="0" static="true"></object>
+  </level>
+</levels>
