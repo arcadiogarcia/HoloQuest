@@ -46,16 +46,16 @@ CLOCKWORKRT.components.register([
 
                 }
             },
-                {
+            {
                 name: "#loop", code: function (data) {
-                        this.engine.var.objectClearedThisFrame = false;
+                    this.engine.var.objectClearedThisFrame = false;
                 }
             },
             {
                 name: "clearObject", code: function (id) {
                     var that = this;
                     var object = getObject(id);
-                    
+
 
                     if (this.engine.var.objectClearedThisFrame != true && object.playerStatus[this.var.id] == "active") {
                         this.engine.var.objectClearedThisFrame = true;
@@ -83,6 +83,13 @@ CLOCKWORKRT.components.register([
                         return that.engine.var.level.filter(function (object) {
                             return object.id == id;
                         })[0];
+                    }
+                }
+            },
+            {
+                name: "#collide", code: function (event) {
+                    if(event.shape2tag=="prohibited"){
+                        this.engine.do.playerWarning({id:this.var.id,warning:"Off limits"});
                     }
                 }
             }

@@ -34,7 +34,24 @@ CLOCKWORKRT.components.register([
                             document.body.removeChild(that.engine.var["#DOM"]);
                             document.body.innerHTML = x;
 
-                            document.getElementById("map").appendChild(that.engine.var["#DOM"]);
+                            // document.getElementById("map").appendChild(that.engine.var["#DOM"]);
+                            var uri = new Windows.Foundation.Uri(CLOCKWORKRT.API.appPath() + "/html/sigma.min.js");
+                            var file = Windows.Storage.StorageFile.getFileFromApplicationUriAsync(uri).done(function (file) {
+                                Windows.Storage.FileIO.readTextAsync(file).done(function (x) {
+                                    eval(x);
+                                    var uri = new Windows.Foundation.Uri(CLOCKWORKRT.API.appPath() + "/html/script.js");
+                                    var file = Windows.Storage.StorageFile.getFileFromApplicationUriAsync(uri).done(function (file) {
+                                        Windows.Storage.FileIO.readTextAsync(file).done(function (x) {
+                                            window.back = function(){that.engine.loadLevel("mainMenu");}
+                                            eval(x);
+                                        });
+                                    }, function (x) {
+                                        that.engine.debug.log(x);
+                                    });
+                                });
+                            }, function (x) {
+                                that.engine.debug.log(x);
+                            });
                         });
                     }, function (x) {
                         that.engine.debug.log(x);

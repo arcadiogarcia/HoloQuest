@@ -1,0 +1,14 @@
+[
+        {
+     "id":"pin1",
+        "type":"pin",
+        "location":[0,-200,0],
+        "requires":[]
+    },
+            {
+     "id":"pin2",
+        "type":"pin",
+        "location":[200,-200,0],
+        "requires":[]
+    }
+]

@@ -156,7 +156,12 @@ CLOCKWORKRT.components.register([
                     this.engine.getRenderingLibrary().sendCommand("setScale", { id: this.spriteholder, value: 0.1 });
                 }
             }
-        ]
+        ],
+        collision: {
+            worldObject: [
+                { "#tag": "prohibited", x: 0, y: 0 },
+            ]
+        }
     },
     {
         name: "studentTracker",
@@ -174,7 +179,7 @@ CLOCKWORKRT.components.register([
                     var div = document.createElement("div");
                     div.id = "player" + id;
                     div.style = "display:block;width:80px;padding:10px;margin-top:20px;background:#066;";
-                    div.innerHTML = "<div id='playername" + id + "' >Student #" + id + "</div><div id='playerprogress" + id + "' >0/" + this.engine.var.levelLength + "</div>";
+                    div.innerHTML = "<div id='playername" + id + "' >Student #" + id + "</div><div id='playerprogress" + id + "' >0/" + this.engine.var.levelLength + "</div><div id='playerwarnings" + id + "' ></div>";
                     document.getElementById("studentTracker").appendChild(div);
                 }
             },
@@ -187,6 +192,11 @@ CLOCKWORKRT.components.register([
                         }
                     });
                     document.getElementById("playerprogress" + id).innerHTML = progress + "/" + this.engine.var.levelLength;
+                }
+            },
+            {
+                name: "playerWarning", code: function (event) {
+                    document.getElementById("playerwarnings" + event.id).innerHTML = event.warning;
                 }
             }
         ]

@@ -1,40 +1,91 @@
-<!DOCTYPE html>
-<html lang="en-US">
 
-<head>
-<meta charset="UTF-8">
- <link rel="stylesheet" href="style.css">
- <script src="js/index.js"></script>
-</head>
-
-<body>
     <div id="horizontalMenu">
-        <div class="styledButton">
-            ↩️ Back
+        <b>
+        <div class="styledButton" id="backButton">
+            ↩ Back
         </div>
         <div class="styledButton">
-            Load
+            📁 Load
         </div>
-        <div class="styledButton">
-            Save
+        <div class="styledButton" id="saveButton">
+            💾 Save
         </div>
-        <div class="styledButton">
-            New
+        <div class="styledButton" id="pinButton">
+            📌 New
         </div>
-        <div class="styledButton">
-            Show map
-        </div>
-        <div class="styledButton">
-            Show quest
-        </div>
+        </b>
+
     </div>
 
     <div id="verticalMenu">
-        
+        <div id="pinFields" style="display: none">
+            <b>Pin Label</b>
+            <input id="pinLabel" type="text"><br>
+            <b>Pin Skin</b>
+            <select id="pinSkin">
+                <option value="red">Red</option>
+                <option value="yellow">Yellow</option>
+                <option value="green">Green</option>
+                <option value="cyan">Cyan</option>
+                <option value="blue">Blue</option>
+                <option value="pink">Pink</option>
+            </select><br>
+            <b>Pin Location</b><br> 
+            x <input id="pinX" type="text"><br> 
+            y <input id="pinY" type="text"><br>
+            <b>Pin Requirements</b><br>
+            Separate with semicolons the labels of the pins that must be completed before this one appears.<br>
+            <input id="pinRequirements" type="text"><br>
+            <b>Pin Type</b>
+            <select id="pinType" onchange="typeChange()">
+                <option value="pin">Pin</option>
+                <option value="text">Text</option>
+                <option value="image">Image</option>
+                <option value="question">Question</option>
+                <option value="restricted">Restricted</option>
+            </select><br>
+            <hr>
+
+            <div id="textPinFields" style="display:none">
+                <b>Pin Text</b><br>
+                <textarea id="pinText"></textarea>
+                <br>
+            </div>
+            <div id="imagePinFields" style="display:none">
+                <b>Pin Image</b><br>
+                <input id="pinImage" type="text"><br>
+                <br>
+            </div>
+            <div id="questionPinFields" style="display:none">
+                <b>Pin Question</b><br>
+                <input id="pinQuestion" type="text"><br>
+                <b>Number of Answers</b>
+                <select id="pinNAnswers" onchange="generateQuestionFields()">
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select><br>
+                <b>Answers</b><br>
+                The first answer should be the right one. They will later be randomized.
+                <div id="pinAnswers">
+                    <textarea id='a0'></textarea><br>
+                    <textarea id='a1'></textarea><br>
+                </div>
+                <br>
+            </div>
+            <div id="saveNodeDiv">
+                <div class="styledButton" id="saveButton">
+                    Save
+                </div>
+            </div>
+            <br>
+        </div>
     </div>
 
     <div id="preview">
-        <div id="map"></div>
-        <div id="quest"></div>
+        <!-- <canvas id="canvas" style="width:75%; height: 90vh;"></canvas> -->
+        <div id="container"></div>
     </div>
-</body>
+
