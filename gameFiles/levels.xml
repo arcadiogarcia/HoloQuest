@@ -16,5 +16,6 @@
     <object name="objectSpawner" type="objectSpawner" x="0" y="0" z="0" static="true"></object>
     <object name="incomingDataHandler" type="incomingDataHandler" x="0" y="0" z="0"></object>
     <object name="levelLoader" type="levelLoader" x="0" y="0" z="0" static="true"></object>
+    <object name="studentTracker" type="studentTracker" x="0" y="0" z="0" static="true"></object>
   </level>
 </levels>

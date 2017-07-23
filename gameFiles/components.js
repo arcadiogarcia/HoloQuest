@@ -22,6 +22,7 @@ CLOCKWORKRT.components.register([
                             }
                         }
                     });
+                    this.engine.do.addPlayer(this.var.id);
                 }
             },
             {
@@ -45,19 +46,26 @@ CLOCKWORKRT.components.register([
 
                 }
             },
+                {
+                name: "#loop", code: function (data) {
+                        this.engine.var.objectClearedThisFrame = false;
+                }
+            },
             {
                 name: "clearObject", code: function (id) {
                     var that = this;
                     var object = getObject(id);
+                    
 
-                    if (object.playerStatus[this.var.id] == "active") {
-                    this.engine.debug.log("Collided with pin " + id + " , " + object.playerStatus[this.var.id])
-
+                    if (this.engine.var.objectClearedThisFrame != true && object.playerStatus[this.var.id] == "active") {
+                        this.engine.var.objectClearedThisFrame = true;
                         object.playerStatus[this.var.id] = "cleared";
                         this.engine.getRenderingLibrary().sendCommand("setObjectStatus", { status: "cleared", player: this.var.id, object: this.engine.find(object.id).spriteholder });
                     } else {
                         return;
                     }
+
+                    this.engine.do.updateProgress(this.var.id);
                     //Find if any new object can be unlocked
                     this.engine.var.level.forEach(function (object) {
                         if (object.requires && object.playerStatus[that.var.id] == "locked") { //If an object is locked and has requirements

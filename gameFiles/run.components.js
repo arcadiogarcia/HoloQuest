@@ -22,24 +22,29 @@ CLOCKWORKRT.components.register([
             {
                 name: "levelLoaded", code: function (level) {
                     var that = this;
+                    var levelLength = 0;
                     level.forEach(function (object) {
                         var spawnedObject;
                         that.engine.debug.log(object.type);
                         switch (object.type) {
                             case "pin":
                                 spawnedObject = that.engine.spawn(object.id, "pin", { id: object.id, $x: object.location[0], $y: object.location[1], $z: object.location[2], requires: object.requires });
+                                levelLength++;
                                 break;
                             case "text":
                                 spawnedObject = that.engine.spawn(object.id, "text", { id: object.id, $x: object.location[0], $y: object.location[1], $z: object.location[2], requires: object.requires, text: object.text });
+                                levelLength++;
                                 break;
                             case "question":
                                 spawnedObject = that.engine.spawn(object.id, "question", { id: object.id, $x: object.location[0], $y: object.location[1], $z: object.location[2], requires: object.requires, text: object.text, options: object.options });
+                                levelLength++;
                                 break;
                             case "prohibited":
                                 spawnedObject = that.engine.spawn(object.id, "prohibited", { id: object.id, $x: object.location[0], $y: object.location[1], $z: object.location[2] });
                                 break;
                         }
                     });
+                    this.engine.var.levelLength = levelLength;
                 }
             }
         ]
@@ -50,7 +55,7 @@ CLOCKWORKRT.components.register([
         events: [
             {
                 name: "#setup", code: function (event) {
-
+                    this.engine.getRenderingLibrary().sendCommand("setScale", { id: this.spriteholder, value: 0.1 });
                 }
             },
             {
@@ -71,6 +76,7 @@ CLOCKWORKRT.components.register([
         events: [
             {
                 name: "#setup", code: function (event) {
+                    this.engine.getRenderingLibrary().sendCommand("setScale", { id: this.spriteholder, value: 0.1 });
                     var canvas = document.createElement('canvas');
                     canvas.width = 500;
                     canvas.height = 500;
@@ -108,6 +114,11 @@ CLOCKWORKRT.components.register([
         sprite: "question",
         events: [
             {
+                name: "#setup", code: function (event) {
+                    this.engine.getRenderingLibrary().sendCommand("setScale", { id: this.spriteholder, value: 0.1 });
+                }
+            },
+            {
                 name: "#collide", code: function (event) {
                     var canvas = document.createElement('canvas');
                     canvas.width = 500;
@@ -138,6 +149,46 @@ CLOCKWORKRT.components.register([
     },
     {
         name: "prohibited",
-        sprite: "prohibited"
+        sprite: "prohibited",
+        events: [
+            {
+                name: "#setup", code: function (event) {
+                    this.engine.getRenderingLibrary().sendCommand("setScale", { id: this.spriteholder, value: 0.1 });
+                }
+            }
+        ]
+    },
+    {
+        name: "studentTracker",
+        events: [
+            {
+                name: "#setup", code: function (event) {
+                    var div = document.createElement("div");
+                    div.id = "studentTracker";
+                    div.style = "position:absolute;right:0px;top:0px;width:100px;height:100%;background:#033;";
+                    document.body.appendChild(div);
+                }
+            },
+            {
+                name: "addPlayer", code: function (id) {
+                    var div = document.createElement("div");
+                    div.id = "player" + id;
+                    div.style = "display:block;width:80px;padding:10px;margin-top:20px;background:#066;";
+                    div.innerHTML = "<div id='playername" + id + "' >Student #" + id + "</div><div id='playerprogress" + id + "' >0/" + this.engine.var.levelLength + "</div>";
+                    document.getElementById("studentTracker").appendChild(div);
+                }
+            },
+            {
+                name: "updateProgress", code: function (id) {
+                    var progress = 0;
+                    this.engine.var.level.forEach(function (object) {
+                        if (object.requires && object.playerStatus[id] == "cleared") {
+                            progress++;
+                        }
+                    });
+                    document.getElementById("playerprogress" + id).innerHTML = progress + "/" + this.engine.var.levelLength;
+                }
+            }
+        ]
     }
 ]);

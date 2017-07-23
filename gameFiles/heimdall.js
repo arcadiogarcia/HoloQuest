@@ -267,7 +267,7 @@ var heimdall = (function () {
                 return;
             }
             if (sendMessage != null) {
-                var msg = ["sendCommand", command, commandArgs];
+                var msg = ["sendCommand", command, JSON.stringify(commandArgs)];
                 sendMessage(msg);
             }
             return library.sendCommand(command, commandArgs);
