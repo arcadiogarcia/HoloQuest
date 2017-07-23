@@ -23,22 +23,36 @@ CLOCKWORKRT.components.register([
         },
     },
     {
-        name: "levelLoader",
+        name: "editorLoader",
         events: [
             {
                 name: "#setup", code: function (event) {
-                    var openPicker = new Windows.Storage.Pickers.FileOpenPicker();
-                    openPicker.viewMode = Windows.Storage.Pickers.PickerViewMode.list;
-                    openPicker.suggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.documentsLibrary;
-                    openPicker.fileTypeFilter.replaceAll([".hq"]);
-                    var that=this;
-                    openPicker.pickSingleFileAsync().then(function (file) {
-                        if (file) {
-                            Windows.Storage.FileIO.readTextAsync(file).then(function(text){
-                                that.engine.do.levelLoaded(text);
-                            });
-                        }
+                    var that = this;
+                    var uri = new Windows.Foundation.Uri(CLOCKWORKRT.API.appPath() + "/html/editor.html");
+                    var file = Windows.Storage.StorageFile.getFileFromApplicationUriAsync(uri).done(function (file) {
+                        Windows.Storage.FileIO.readTextAsync(file).done(function (x) {
+                            document.body.removeChild(that.engine.var["#DOM"]);
+                            document.body.innerHTML = x;
+
+                            document.getElementById("map").appendChild(that.engine.var["#DOM"]);
+                        });
+                    }, function (x) {
+                        that.engine.debug.log(x);
                     });
+
+                    var uri = new Windows.Foundation.Uri(CLOCKWORKRT.API.appPath() + "/html/editor.css");
+                    var file = Windows.Storage.StorageFile.getFileFromApplicationUriAsync(uri).done(function (file) {
+                        Windows.Storage.FileIO.readTextAsync(file).done(function (x) {
+                            var head = document.getElementsByTagName('head')[0];
+                            var style = document.createElement('style');
+                            style.innerHTML = x;
+                            head.appendChild(style);
+                        });
+                    }, function (x) {
+                        that.engine.debug.log(x);
+                    });
+
+
                 }
             }
         ]

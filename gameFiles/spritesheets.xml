@@ -35,105 +35,133 @@
       <frame name="fov" code="context.strokeStyle='#00c8ff';context.lineWidth=15;context.beginPath();context.arc(x,y,30,vars.$angle-0.5,vars.$angle+0.5);context.stroke();" t="100"></frame>
     </frames>
   </spritesheet>
-  <spritesheet name="bomb" src="images/bomb.png">
+  <spritesheet name="pin" src="images/pins.png">
     <states>
-      <state name="idle">
-        <layer name="idle"></layer>
+      <state name="visible">
+        <layer name="red"></layer>
       </state>
-      <state name="warning">
-        <layer name="warning"></layer>
+      <state name="hidden">
+        <layer name="hidden"></layer>
       </state>
-      <state name="danger">
-        <layer name="danger"></layer>
+      <state name="red">
+        <layer name="red"></layer>
+      </state>
+      <state name="yellow">
+        <layer name="yellow"></layer>
+      </state>
+      <state name="green">
+        <layer name="green"></layer>
+      </state>
+      <state name="cyan">
+        <layer name="cyan"></layer>
+      </state>
+      <state name="blue">
+        <layer name="blue"></layer>
+      </state>
+      <state name="purple">
+        <layer name="purple"></layer>
       </state>
     </states>
     <layers>
-      <layer name="idle" x="-50" y="-50">
-        <frame name="idle"></frame>
-      </layer>
-      <layer name="warning" x="-50" y="-50">
-        <frame name="idle"></frame>
-        <frame name="glow"></frame>
-      </layer>
-      <layer name="danger" x="-50" y="-50">
-        <frame name="glow"></frame>
+      <layer name="red" x="-250" y="-250">
         <frame name="red"></frame>
       </layer>
+      <layer name="yellow" x="-250" y="-250">
+        <frame name="yellow"></frame>
+      </layer>
+      <layer name="green" x="-250" y="-250">
+        <frame name="green"></frame>
+      </layer>
+      <layer name="cyan" x="-250" y="-250">
+        <frame name="cyan"></frame>
+      </layer>
+      <layer name="blue" x="-250" y="-250">
+        <frame name="blue"></frame>
+      </layer>
+      <layer name="purple" x="-250" y="-250">
+        <frame name="purple"></frame>
+      </layer>
+      <layer name="hidden" x="0" y="0">
+        <frame name="hidden"></frame>
+      </layer>
     </layers>
     <frames>
-      <frame name="idle" x="0" y="0" w="100" h="100" t="100"></frame>
-      <frame name="glow" x="100" y="0" w="100" h="100" t="100"></frame>
-      <frame name="red" x="200" y="0" w="100" h="100" t="100"></frame>
+      <frame name="red" x="0" y="0" w="500" h="500" t="200"></frame>
+      <frame name="yellow" x="500" y="0" w="500" h="500" t="200"></frame>
+      <frame name="green" x="1000" y="0" w="500" h="500" t="200"></frame>
+      <frame name="cyan" x="1500" y="0" w="500" h="500" t="200"></frame>
+      <frame name="blue" x="2000" y="0" w="500" h="500" t="200"></frame>
+      <frame name="purple" x="2500" y="0" w="500" h="500" t="200"></frame>
+      <frame name="hidden" x="0" y="0" w="1" h="1" t="200"></frame>
     </frames>
   </spritesheet>
-  <spritesheet name="player">
+  <spritesheet name="question" src="images/question.png">
     <states>
-      <state name="player">
-        <layer name="fov"></layer>
-        <layer name="player"></layer>
+      <state name="visible">
+        <layer name="idle"></layer>
       </state>
-    </states>
-    <layers>
-      <layer name="player" x="0" y="0">
-        <frame name="player"></frame>
-      </layer>
-      <layer name="fov" x="0" y="0">
-        <frame name="fov"></frame>
-      </layer>
-    </layers>
-    <frames>
-      <frame name="player" code="context.strokeStyle='white';context.beginPath();context.arc(x,y,5,0,2*Math.PI);context.stroke();" t="100"></frame>
-      <frame name="fov" code="context.strokeStyle='#AAF';context.beginPath();context.arc(x,y,50,vars.$angle-0.5,vars.$angle+0.5);context.stroke();" t="100"></frame>
-    </frames>
-  </spritesheet>
-  <spritesheet name="plasma" src="images/plasma.png">
-    <states>
+      <state name="hidden">
+        <layer name="hidden"></layer>
+      </state>
       <state name="idle">
         <layer name="idle"></layer>
       </state>
     </states>
     <layers>
-      <layer name="idle" x="-25" y="-25">
-        <frame name="round"></frame>
-        <frame name="star"></frame>
-        <frame name="round"></frame>
-        <frame name="tri"></frame>
+      <layer name="idle" x="-500" y="-500">
+        <frame name="idle"></frame>
+      </layer>
+      <layer name="hidden" x="0" y="0">
+        <frame name="hidden"></frame>
       </layer>
     </layers>
     <frames>
-      <frame name="round" x="0" y="0" w="50" h="50" t="100"></frame>
-      <frame name="star" x="50" y="0" w="50" h="50" t="100"></frame>
-      <frame name="tri" x="100" y="0" w="50" h="50" t="100"></frame>
+      <frame name="idle" x="0" y="0" w="1000" h="1000" t="200"></frame>
+      <frame name="hidden" x="0" y="0" w="1" h="1" t="200"></frame>
     </frames>
   </spritesheet>
-  <spritesheet name="explosion" src="images/explosion.png">
+  <spritesheet name="prohibited" src="images/prohibited.png">
     <states>
-      <state name="good">
+      <state name="visible">
+        <layer name="idle"></layer>
       </state>
-      <state name="good">
-        <layer name="good"></layer>
-      </state>
-      <state name="bad">
-        <layer name="bad"></layer>
+      <state name="hidden">
+        <layer name="hidden"></layer>
       </state>
     </states>
     <layers>
-      <layer name="good" x="-150" y="-150">
-        <frame name="fire"></frame>
-        <frame name="explode"></frame>
-        <frame name="sparkle"></frame>
+      <layer name="idle" x="-500" y="-500">
+        <frame name="idle"></frame>
       </layer>
-      <layer name="bad" x="-150" y="-150">
-        <frame name="fire"></frame>
-        <frame name="explode"></frame>
-        <frame name="skull"></frame>
+      <layer name="hidden" x="0" y="0">
+        <frame name="hidden"></frame>
       </layer>
     </layers>
     <frames>
-      <frame name="fire" x="0" y="0" w="300" h="300" t="200"></frame>
-      <frame name="explode" x="300" y="0" w="300" h="300" t="200"></frame>
-      <frame name="sparkle" x="600" y="0" w="300" h="300" t="0"></frame>
-      <frame name="skull" x="900" y="0" w="300" h="300" t="0"></frame>
+      <frame name="idle" x="0" y="0" w="1000" h="1000" t="200"></frame>
+      <frame name="hidden" x="0" y="0" w="1" h="1" t="200"></frame>
+    </frames>
+  </spritesheet>
+    <spritesheet name="text" src="images/text.png">
+    <states>
+      <state name="visible">
+        <layer name="idle"></layer>
+      </state>
+      <state name="hidden">
+        <layer name="hidden"></layer>
+      </state>
+    </states>
+    <layers>
+      <layer name="idle" x="-250" y="-250">
+        <frame name="idle"></frame>
+      </layer>
+      <layer name="hidden" x="0" y="0">
+        <frame name="hidden"></frame>
+      </layer>
+    </layers>
+    <frames>
+      <frame name="idle" x="0" y="0" w="500" h="500" t="200"></frame>
+      <frame name="hidden" x="0" y="0" w="1" h="1" t="200"></frame>
     </frames>
   </spritesheet>
   <spritesheet name="meshRenderer" positionBasedOptimizations="false">
@@ -151,7 +179,7 @@
       <frame name="mesh" code="      for(var id in vars.$images){    if(vars.$images[id]){    context.drawImage(vars.$images[id].canvas,x+vars.$images[id].x,y+vars.$images[id].y);  }    }      " t="100"></frame>
     </frames>
   </spritesheet>
-   <spritesheet name="menuButton" positionBasedOptimizations="false">
+  <spritesheet name="menuButton" positionBasedOptimizations="false">
     <states>
       <state name="button">
         <layer name="button"></layer>

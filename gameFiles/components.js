@@ -4,109 +4,86 @@ CLOCKWORKRT.components.register([
         sprite: "background"
     },
     {
-        name: "bomb",
-        sprite: "bomb",
-        events: [
-            {
-                name: "#setup", code: function (event) {
-                    this.var.t = 0;
-                }
-            },
-            {
-                name: "#loop", code: function (event) {
-                    this.var.t++;
-                    if (this.var.t == 180) {
-                        this.var.$state = "warning";
-                    }
-                    if (this.var.t == 300) {
-                        this.var.$state = "danger";
-                    }
-                    if (this.var.t == 500) {
-                        this.engine.addObjectLive("badExplosion", "badExplosion", this.var.$x, this.var.$y, this.var.$z);
-                        this.engine.deleteObjectLive(this);
-                    }
-                }
-            },
-            {
-                name: "#collide", code: function (event) {
-                    if (event.shape2tag == "plasma") {
-                        this.engine.addObjectLive("goodExplosion", "goodExplosion", this.var.$x, this.var.$y, this.var.$z);
-                        this.engine.deleteObjectLive(this);
-                    }
-                }
-            }
-        ],
-        collision: {
-            destructible: [
-                { "#tag": "bomb", x: 0, y: 0, z: 0 },
-            ]
-        },
-    },
-    {
-        name: "projectile",
-        sprite: "plasma",
-        events: [
-            {
-                name: "#setup", code: function (data) {
-                    this.var.t = 0;
-                }
-            },
-            {
-                name: "#loop", code: function (data) {
-                    this.var.$x += this.var.vx;
-                    this.var.$y += this.var.vy;
-                    this.var.$z += this.var.vz;
-                    if (this.var.t++ > 300) {
-                        this.engine.deleteObjectLive(this);
-                    }
-                }
-            },
-            {
-                name: "#collide", code: function (event) {
-                    if (event.shape2tag == "bomb") {
-                        this.engine.deleteObjectLive(this);
-                    }
-                }
-            }
-        ],
-        collision: {
-            plasma: [
-                { "#tag": "plasma", x: 0, y: 0, z: 0 },
-            ]
-        },
-    },
-    {
         name: "player",
         sprite: "player",
         events: [
             {
                 name: "#setup", code: function (data) {
+                    var that = this;
                     this.var.$angle = 0;
+                    this.engine.var.level.forEach(function (object) {
+                        if (object.requires && that.engine.find(object.id)) {
+                            if (object.requires.length == 0) {
+                                object.playerStatus[that.var.id] = "active";
+                                that.engine.getRenderingLibrary().sendCommand("setObjectStatus", { status: "active", player: that.var.id, object: that.engine.find(object.id).spriteholder });
+                            } else {
+                                object.playerStatus[that.var.id] = "locked";
+                                that.engine.getRenderingLibrary().sendCommand("setObjectStatus", { status: "locked", player: that.var.id, object: that.engine.find(object.id).spriteholder });
+                            }
+                        }
+                    });
                 }
             },
             {
                 name: "updatePlayerPosition", code: function (data) {
-                    this.var.$x = data.x;
-                    this.var.$y = data.y;
-                    this.engine.do.updateCameraPosition(data);
+                    if (data.player === this.var.id) {
+                        this.var.$x = data.x;
+                        this.var.$y = data.y;
+                        this.engine.do.updateCameraPosition(data);
+                    }
                 }
             },
             {
                 name: "updatePlayerGaze", code: function (data) {
-                    this.var.$angle = Math.atan2(data.y, data.x);
+                    if (data.player === this.var.id) {
+                        this.var.$angle = Math.atan2(data.y, data.x);
+                    }
                 }
             },
             {
                 name: "shootPlayerProjectile", code: function (data) {
-                    var distance = 40;
-                    var projectile = this.engine.addObjectLive("someProjectile", "projectile", data.head.x + data.gaze.x * distance, data.head.y + data.gaze.y * distance, data.head.z + data.gaze.z * distance);
-                    var speed = 10;
-                    projectile.var.vx = data.gaze.x * speed;
-                    projectile.var.vy = data.gaze.y * speed;
-                    projectile.var.vz = data.gaze.z * speed;
+
+                }
+            },
+            {
+                name: "clearObject", code: function (id) {
+                    var that = this;
+                    var object = getObject(id);
+
+                    if (object.playerStatus[this.var.id] == "active") {
+                    this.engine.debug.log("Collided with pin " + id + " , " + object.playerStatus[this.var.id])
+
+                        object.playerStatus[this.var.id] = "cleared";
+                        this.engine.getRenderingLibrary().sendCommand("setObjectStatus", { status: "cleared", player: this.var.id, object: this.engine.find(object.id).spriteholder });
+                    } else {
+                        return;
+                    }
+                    //Find if any new object can be unlocked
+                    this.engine.var.level.forEach(function (object) {
+                        if (object.requires && object.playerStatus[that.var.id] == "locked") { //If an object is locked and has requirements
+                            if (object.requires.map(function (id) {
+                                return getObject(id).playerStatus[that.var.id] == "cleared"; //Check if every required object is unlocked
+                            }).reduce(function (x, y) { return x && y })) {
+                                that.engine.debug.log("Enabling " + object.id)
+
+                                object.playerStatus[that.var.id] = "active";
+                                that.engine.getRenderingLibrary().sendCommand("setObjectStatus", { status: "active", player: that.var.id, object: that.engine.find(object.id).spriteholder });
+                            }
+                        }
+                    });
+                    function getObject(id) {
+                        return that.engine.var.level.filter(function (object) {
+                            return object.id == id;
+                        })[0];
+                    }
                 }
             }
-        ]
+        ],
+        collision: {
+            player: [
+                { "#tag": "player", x: 0, y: 0 },
+            ]
+        }
     },
     {
         name: "objectSpawner",
@@ -126,7 +103,7 @@ CLOCKWORKRT.components.register([
             {
                 name: "#collide", code: function (event) {
                     if (event.shape2tag == "click") {
-                        this.engine.addObjectLive("someBomb", "bomb", this.engine.var.$cameraX + event.data.x * 1266, this.engine.var.$cameraY + event.data.y * 768, 0);
+                        // this.engine.addObjectLive("someBomb", "bomb", this.engine.var.$cameraX + event.data.x * 1266, this.engine.var.$cameraY + event.data.y * 768, 0);
                     }
                 }
             }
@@ -148,12 +125,16 @@ CLOCKWORKRT.components.register([
             {
                 name: "incomingData", code: function (event) {
                     switch (event.data[0]) {
+                        case "playerConnected":
+                            this.engine.spawn("player" + event.player, "player", { $x: 0, $y: 0, $z: 0, id: event.player });
+                            break;
                         case "move":
-                            this.engine.do.updatePlayerPosition({ x: event.data[1].X, y: event.data[1].Z, z: event.data[1].Y });
-                            this.engine.do.updatePlayerGaze({ x: event.data[2].X, y: event.data[2].Z, z: event.data[2].Y });
+                            this.engine.do.updatePlayerPosition({ player: event.player, x: event.data[1].X, y: event.data[1].Z, z: event.data[1].Y });
+                            this.engine.do.updatePlayerGaze({ player: event.player, x: event.data[2].X, y: event.data[2].Z, z: event.data[2].Y });
                             break;
                         case "tap":
-                            this.engine.do.shootPlayerProjectile({ head: { x: event.data[1].X, y: event.data[1].Z, z: event.data[1].Y }, gaze: { x: event.data[2].X, y: event.data[2].Z, z: event.data[2].Y } });
+                            this.engine.debug.log(JSON.stringify({ x: event.data[1].X, y: event.data[1].Z, z: event.data[1].Y }));
+                            this.engine.do.tap({ player: event.player, head: { x: event.data[1].X, y: event.data[1].Z, z: event.data[1].Y }, gaze: { x: event.data[2].X, y: event.data[2].Z, z: event.data[2].Y } });
                             break;
                         case "surfaceAdded":
                             this.engine.do.surfaceAdded({ id: event.data[1], vertexes: event.data[2], indexes: event.data[3] });
@@ -229,38 +210,6 @@ CLOCKWORKRT.components.register([
                     this.var.$images[id] = { canvas: canvas, x: minX, y: minZ };
                 }
             }
-        ]
-    },
-    {
-        name: "explosion",
-        sprite: "explosion",
-        events: [
-            {
-                name: "#setup", code: function (event) {
-                    this.var.t = 0;
-                }
-            },
-            {
-                name: "#loop", code: function (event) {
-                    if (this.var.t++ > 60) {
-                        this.engine.deleteObjectLive(this);
-                    }
-                }
-            }
-        ]
-    },
-    {
-        name: "goodExplosion",
-        inherits: "explosion",
-        vars: [
-            { name: "$state", value: "good" }
-        ]
-    },
-    {
-        name: "badExplosion",
-        inherits: "explosion",
-        vars: [
-            { name: "$state", value: "bad" }
         ]
     }
 ]);

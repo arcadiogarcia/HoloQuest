@@ -14,6 +14,8 @@ var heimdall = (function () {
         }
     };
 
+    var sendIndividualMessage = [];
+
     var onError = function (e) {
         log(JSON.stringify(e));
     }
@@ -25,13 +27,21 @@ var heimdall = (function () {
         var tcpSocket = eventArgument.socket;
         var writer = new Windows.Storage.Streams.DataWriter(tcpSocket.outputStream);
         var tcpReader = new Windows.Storage.Streams.DataReader(tcpSocket.inputStream);
-        sendMessage = function (message) {
+        sendIndividualMessage[playerId] = function (message) {
             message = JSON.stringify(message);
             writer.writeInt32(writer.measureString(message));
             writer.writeString(message);
             writer.storeAsync();
         };
+        sendMessage = function (message) {
+            sendIndividualMessage.forEach(function (fn) {
+                if (fn) {
+                    fn(message);
+                }
+            })
+        }
         cachedMessages.forEach(sendMessage);
+        engineMessageHandler({ player: playerId, data: ["playerConnected"] });
         startServerRead(tcpReader, playerId++);
     }
 
@@ -63,7 +73,7 @@ var heimdall = (function () {
                     var string = tcpReader.readString(count);
                     var data = JSON.parse(string);
                     engineMessageHandler({ player: playerId, data: data });
-                }catch(e){
+                } catch (e) {
                     log(e);
                 }
 
@@ -235,6 +245,25 @@ var heimdall = (function () {
             //This function sends a command to your library, you can use this an extension point to provide additional functionality
             if (command == "registerEngineMessageHandler") {
                 engineMessageHandler = commandArgs;
+                return;
+            }
+            if (command == "setObjectStatus") {
+                switch (commandArgs.status) {
+                    case "locked":
+                    case "cleared":
+                        var msg = ["setState", commandArgs.object, "hidden"];
+                        sendIndividualMessage[commandArgs.player](msg);
+                        break;
+                    case "active":
+                        var msg = ["setState", commandArgs.object, "visible"];
+                        sendIndividualMessage[commandArgs.player](msg);
+                        break;
+                }
+                return;
+            }
+            if (command == "registerCustomImage") {
+                var msg = ["registerCustomImage", commandArgs.object, commandArgs.image];
+                sendMessage(msg);
                 return;
             }
             if (sendMessage != null) {

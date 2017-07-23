@@ -5,7 +5,8 @@
         "collisions.js",
         "heimdall.js",
         "components.js",
-        "menu.components.js"
+        "menu.components.js",
+        "run.components.js"
     ],
     "levels": [
         "levels.xml"

@@ -6,6 +6,7 @@
     <object name="runScenario" type="menuButton" x="250" y="500" z="0" vars='{"text":"Run","target":"mainLevel"}'></object>
   </level>
   <level id="editMenu">
+    <object name="editorLoader" type="editorLoader" x="0" y="0" z="0" static="true"></object>
     <object name="mouse" type="mouse" x="0" y="0" z="0"></object>
   </level>
   <level id="mainLevel">
@@ -14,7 +15,6 @@
     <object name="mouse" type="mouse" x="0" y="0" z="0"></object>
     <object name="objectSpawner" type="objectSpawner" x="0" y="0" z="0" static="true"></object>
     <object name="incomingDataHandler" type="incomingDataHandler" x="0" y="0" z="0"></object>
-    <object name="player" type="player" x="0" y="0" z="0"></object>
     <object name="levelLoader" type="levelLoader" x="0" y="0" z="0" static="true"></object>
   </level>
 </levels>

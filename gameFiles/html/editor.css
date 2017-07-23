@@ -1,0 +1,34 @@
+body{
+    background-color:black;
+    font-family:"Tahoma";
+}
+
+#horizontalMenu{
+    width:100%;
+    height: 15vh;
+    background-color: blue;
+}
+
+#verticalMenu{
+    width:25%;
+    height: 80vh;
+    top:20vh;
+    background-color: red;
+    float:left;
+}
+
+#preview{
+    width:100%;
+    height: 80vh;
+    background-color: yellowgreen;
+}
+
+.styledButton{
+    width:250px;
+    height: 100px;
+    text-align: center;
+    background-color: yellow;
+    border-radius: 50px;
+    font-size: 50px;
+    display: inline-block;
+}
