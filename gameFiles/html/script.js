@@ -6,16 +6,14 @@ var nodes = [];
 
 
 function save() {
-    var openPicker = new Windows.Storage.Pickers.FileOpenPicker();
+    var openPicker = new Windows.Storage.Pickers.FileSavePicker();
     openPicker.viewMode = Windows.Storage.Pickers.PickerViewMode.list;
     openPicker.suggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.documentsLibrary;
     openPicker.fileTypeFilter.replaceAll([".hq"]);
     var that = this;
-    openPicker.pickSingleFileAsync().then(function (file) {
+    openPicker.pickSaveFileAsync().then(function (file) {
         if (file) {
-            Windows.Storage.FileIO.readTextAsync(file).then(function (text) {
-                that.engine.var.level = JSON.parse(text).map(function (x) { x.playerStatus = {}; return x; });
-                that.do.levelLoaded(JSON.parse(text));
+            Windows.Storage.FileIO.WriteTextAsync(file,JSON.stringify(nodes)).then(function (text) {
             });
         }
     });
